@@ -1,11 +1,19 @@
 package com.coolweather.ljlnews.fragment;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +36,7 @@ import com.coolweather.ljlnews.adapter.ItemNewsAdapter;
 import com.coolweather.ljlnews.adapter.NewAdapter;
 import com.coolweather.ljlnews.entity.News;
 import com.coolweather.ljlnews.entity.NewsItem;
+import com.coolweather.ljlnews.service.MyService;
 import com.coolweather.ljlnews.util.HttpUtils;
 import com.coolweather.ljlnews.util.JsonUtility;
 
@@ -46,11 +56,13 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 public class FragmentFina extends Fragment {
     private News news;
     private static final String address = "https://way.jd.com/jisuapi/get?channel=财经&num=20&start=0&appkey=93e14b1331ec2205eb37b50e290ab542";
     private RecyclerView recyclerView;
-    private List<NewsItem> list = new ArrayList<NewsItem>();;
+    private List<NewsItem> list = new ArrayList<NewsItem>();
     private  NewAdapter newAdapter;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -73,7 +85,6 @@ public class FragmentFina extends Fragment {
                 queryFromServer(address);
                 Toast.makeText(getContext(),"刷新数据",Toast.LENGTH_SHORT).show();
                 Log.d("测试数据","刷新数据");
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
         newAdapter.setOnRecyclerViewItemClickListener(new NewAdapter.OnItemClickListener() {
@@ -100,11 +111,11 @@ public class FragmentFina extends Fragment {
         super.onResume();
         newAdapter.notifyDataSetChanged();
     }
+
     //从服务器中请求数据
     public void queryFromServer(String address){
         Log.d("测试数据","发送请求！");
         HttpUtils.sendOkHttpRequest(address, new Callback() {
-
             Handler mainHandler = new Handler(getContext().getMainLooper());
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -112,6 +123,7 @@ public class FragmentFina extends Fragment {
             }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final boolean flag = true;
                 Log.d("测试请求！","请求成功");
                 String responseText;
                 responseText = response.body().string();
@@ -121,6 +133,7 @@ public class FragmentFina extends Fragment {
                 list.clear();
                 for(int i = 0;i < 20;i ++){
                     try {
+
                         imgStr = bitmapToString(getImage(news.getResult().getResult().getList().get(i).getPic()));
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -132,16 +145,42 @@ public class FragmentFina extends Fragment {
                             .img(imgStr).build();
                     list.add(newsItem);
                 }
-
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        newAdapter.notifyDataSetChanged();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+                                Log.d("测试数据", "开始调用！");
+                                newAdapter.notifyDataSetChanged();
+                                swipeRefreshLayout.setRefreshing(false);
+                        }
+
                 });
                 Log.d("测试数据！","数据装载完成");
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        while(true) {
+                            final Intent intent = new Intent(getContext(), MyService.class);
+                            intent.putExtra("list",(Serializable)list.get(0));
+                            final ServiceConnection serviceConnection = new ServiceConnection() {
+                                @Override
+                                public void onServiceConnected(ComponentName name, IBinder service) {
+                                }
 
+                                @Override
+                                public void onServiceDisconnected(ComponentName name) {
+
+                                }
+                            };
+                            getActivity().startService(intent);
+                            try {
+                                Thread.sleep(60000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }.run();
             }
         });
         Log.d("测试请求！","开始请求");

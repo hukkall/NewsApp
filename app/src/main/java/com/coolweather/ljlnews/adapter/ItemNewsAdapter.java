@@ -91,16 +91,21 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.ViewHo
         }
 
     }
+
+
     //返回列表的大小
     @Override
     public int getItemCount() {
         return strings.size();
     }
+
+
     //定义一个点击事件接口
     public interface OnItemClickListener {
         void onClick(int position);
         void onLongClick(int position);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {

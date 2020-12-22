@@ -68,8 +68,7 @@ public class DetMessageActivity extends AppCompatActivity {
         try {
             byte[] bitmapArray;
             bitmapArray = Base64.decode(str, Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                            bitmapArray.length);
+            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,bitmapArray.length);
             return bitmap;
         } catch (Exception e) {
             return null;

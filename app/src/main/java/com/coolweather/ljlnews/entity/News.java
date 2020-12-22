@@ -2,6 +2,7 @@ package com.coolweather.ljlnews.entity;
 
 import java.io.Serializable;
 import java.util.List;
+
 //这个用GSon来解析json数据的类
 public class News implements Serializable {
 

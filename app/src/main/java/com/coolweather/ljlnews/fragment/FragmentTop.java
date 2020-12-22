@@ -144,6 +144,7 @@ public class FragmentTop extends Fragment {
                     public void run() {
                         newAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 Log.d("测试数据！","数据装载完成");
