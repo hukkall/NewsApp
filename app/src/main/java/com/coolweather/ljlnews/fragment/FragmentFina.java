@@ -116,6 +116,7 @@ public class FragmentFina extends Fragment {
     public void queryFromServer(String address){
         Log.d("测试数据","发送请求！");
         HttpUtils.sendOkHttpRequest(address, new Callback() {
+            //安卓自带的handler机制
             Handler mainHandler = new Handler(getContext().getMainLooper());
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -133,7 +134,6 @@ public class FragmentFina extends Fragment {
                 list.clear();
                 for(int i = 0;i < 20;i ++){
                     try {
-
                         imgStr = bitmapToString(getImage(news.getResult().getResult().getList().get(i).getPic()));
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -145,21 +145,25 @@ public class FragmentFina extends Fragment {
                             .img(imgStr).build();
                     list.add(newsItem);
                 }
+
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
                                 Log.d("测试数据", "开始调用！");
+                                //跳回到主线程提醒Recycleview更新数据
                                 newAdapter.notifyDataSetChanged();
                                 swipeRefreshLayout.setRefreshing(false);
                         }
 
                 });
+
                 Log.d("测试数据！","数据装载完成");
                 new Thread(){
                     @Override
                     public void run() {
                         super.run();
                         while(true) {
+                            //Intent 携带数据跳转到到目标class
                             final Intent intent = new Intent(getContext(), MyService.class);
                             intent.putExtra("list",(Serializable)list.get(0));
                             final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -172,6 +176,7 @@ public class FragmentFina extends Fragment {
 
                                 }
                             };
+                            //开始跳转
                             getActivity().startService(intent);
                             try {
                                 Thread.sleep(60000);
@@ -193,8 +198,7 @@ public class FragmentFina extends Fragment {
         return Base64.encodeToString(byteArr,Base64.DEFAULT);
     }
 
-    //将url的图片转为bitmap
-
+    //将网络url的图片转为bitmap
     public static Bitmap getImage(String src) {
         try {
             URL url = new URL(src);

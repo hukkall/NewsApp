@@ -32,6 +32,7 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.ViewHo
         }
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            //对控件进行实例
             itemName = itemView.findViewById(R.id.channel_text);
             view = itemView;
         }
@@ -73,7 +74,7 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.ViewHo
         String str  = strings.get(position);
         final int fPosition = position;
         holder.itemName.setText(str);
-        if(position == getthisPosition()){              //再将返回回来的进行比较
+        if(position == getthisPosition()){                 //再将返回回来的进行比较
             holder.itemName.setTextColor(Color.parseColor("#ffffff"));
             holder.getView().setBackgroundColor(Color.parseColor("#FC8915"));
         }else{
@@ -89,7 +90,6 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.ViewHo
                 }
             });
         }
-
     }
 
 
@@ -103,7 +103,6 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.ViewHo
     //定义一个点击事件接口
     public interface OnItemClickListener {
         void onClick(int position);
-        void onLongClick(int position);
     }
 
 

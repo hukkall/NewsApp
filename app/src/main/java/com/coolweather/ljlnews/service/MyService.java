@@ -31,13 +31,19 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * 前台服务，充当通知用
+ */
 public class MyService extends Service {
     /**
      * 唯一前台通知ID
      */
     private static final int NOTIFICATION_ID = 1000;
+
     public MyService() {
     }
+
+
     //服务创建时调用
     @Override
     public void onCreate() {
@@ -50,6 +56,8 @@ public class MyService extends Service {
     public void onDestroy() {
         super.onDestroy();
     }
+
+
     //开始服务时调用
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -64,8 +72,8 @@ public class MyService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
-    //将url的图片转为bitmap
 
+    //将url的图片转为bitmap
     public static Bitmap getImage(String src) {
         try {
             URL url = new URL(src);

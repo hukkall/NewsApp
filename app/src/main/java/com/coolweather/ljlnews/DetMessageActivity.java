@@ -45,6 +45,7 @@ public class DetMessageActivity extends AppCompatActivity {
             }
         });
     }
+
     //装载数据
     public void initData(){
         String content = "";
@@ -62,6 +63,7 @@ public class DetMessageActivity extends AppCompatActivity {
         }
         newContent.setText(content);
     }
+
     //字符串转为bitmap
     public Bitmap toBitmap(String str){
         Bitmap bitmap = null;

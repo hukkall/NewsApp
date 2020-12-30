@@ -92,9 +92,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         navImage = findViewById(R.id.navimage);
         recyclerView = findViewById(R.id.recyclerview);
         viewPager = findViewById(R.id.viewpager);
+
+
+
         centerLayoutManager = new CenterLayoutManager(this);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        ((LinearLayoutManager) layoutManager).setOrientation(RecyclerView.HORIZONTAL);
         centerLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView.setLayoutManager(centerLayoutManager);
         itemNewsAdapter = new ItemNewsAdapter(list);
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         viewPager.setAdapter(new pagerAdaper(getSupportFragmentManager(),fragments));
         viewPager.setOnPageChangeListener(this);
         viewPager.setCurrentItem(0);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(3);     //后台存活的碎数
     }
     //初始化点击事件
     public void initListner(){
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             @Override
             public void onClick(View v) {
                 drawerLayout.openDrawer(Gravity.LEFT);
-
             }
         });
         //使用刚刚写好的暴露的接口，这里用到了接口回溯
@@ -127,10 +127,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 itemNewsAdapter.notifyDataSetChanged();
             }
 
-            @Override
-            public void onLongClick(int position) {
-
-            }
         });
     }
     //初始化数据
@@ -166,25 +162,25 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageSelected(int position) {
         switch(position){
             case 0:
-                Toast.makeText(getBaseContext(),"0",Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getBaseContext(),"0",Toast.LENGTH_SHORT).show();
                 itemNewsAdapter.setThisPosition(0);
                 centerLayoutManager.smoothScrollToPosition(recyclerView,new RecyclerView.State(),0);
                 itemNewsAdapter.notifyDataSetChanged();
                 break;
             case 1:
-                Toast.makeText(getBaseContext(),"1",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getBaseContext(),"1",Toast.LENGTH_SHORT).show();
                 itemNewsAdapter.setThisPosition(1);
                 centerLayoutManager.smoothScrollToPosition(recyclerView,new RecyclerView.State(),1);
                 itemNewsAdapter.notifyDataSetChanged();
                 break;
             case 2:
-                Toast.makeText(getBaseContext(),"2",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getBaseContext(),"2",Toast.LENGTH_SHORT).show();
                 itemNewsAdapter.setThisPosition(2);
                 centerLayoutManager.smoothScrollToPosition(recyclerView,new RecyclerView.State(),2);
                 itemNewsAdapter.notifyDataSetChanged();
                 break;
             case 3:
-                Toast.makeText(getBaseContext(),"3",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getBaseContext(),"3",Toast.LENGTH_SHORT).show();
                 itemNewsAdapter.setThisPosition(3);
                 centerLayoutManager.smoothScrollToPosition(recyclerView,new RecyclerView.State(),3);
                 itemNewsAdapter.notifyDataSetChanged();
